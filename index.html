@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mystic Lens Entertainment | AI-Native Cinematic Studio</title>
+    <style>
+        /* --- CSS VARIABLES & RESET --- */
+        :root {
+            --bg-dark: #050505;
+            --bg-card: #121212;
+            --text-main: #e0e0e0;
+            --text-muted: #a0a0a0;
+            --accent: #f5c518; /* Cinematic Gold */
+            --accent-glow: rgba(245, 197, 24, 0.2);
+            --font-main: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            --font-serif: 'Georgia', serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: var(--font-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        a { text-decoration: none; color: inherit; transition: 0.3s; }
+        ul { list-style: none; }
+        img { max-width: 100%; display: block; }
+
+        /* --- UTILITIES --- */
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+        .btn {
+            display: inline-flex; /* Updated for icon alignment */
+            align-items: center;  /* Center icon vertically */
+            gap: 10px;            /* Space between icon and text */
+            padding: 12px 30px;
+            background-color: transparent;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: var(--accent);
+            color: #000;
+            box-shadow: 0 0 20px var(--accent-glow);
+        }
+        
+        /* Ensure the SVG icon inherits the hover color change */
+        .btn svg {
+            fill: currentColor;
+            width: 20px;
+            height: 20px;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 1rem;
+            color: #fff;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            margin-bottom: 4rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* --- HEADER --- */
+        header {
+            padding: 10px 0 10px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            background: rgba(5, 5, 5, 0.95);
+            border-bottom: 1px solid #222;
+            backdrop-filter: blur(10px);
+        }
+
+        nav { display: flex; justify-content: space-between; align-items: center; }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: #fff;
+            letter-spacing: 1px;
+        }
+
+        .logo img { height: 60px; width: auto; }
+
+        .nav-links { display: flex; gap: 30px; }
+        .nav-links a {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+        .nav-links a:hover { color: var(--accent); }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: radial-gradient(circle at center, #1a1a1a 0%, #000 100%);
+            padding-top: 80px;
+            position: relative;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: url('https://www.transparenttextures.com/patterns/stardust.png');
+            opacity: 0.3;
+            pointer-events: none;
+        }
+
+        .hero-content h1 {
+            font-size: 4.5rem;
+            line-height: 1.1;
+            margin-bottom: 25px;
+            background: linear-gradient(to bottom right, #ffffff, #999999);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-content p {
+            font-size: 1.3rem;
+            color: var(--text-muted);
+            max-width: 800px;
+            margin: 0 auto 35px;
+            font-weight: 300;
+        }
+
+        /* --- STATS BAR --- */
+        .stats-bar {
+            background: #0a0a0a;
+            border-top: 1px solid #222;
+            border-bottom: 1px solid #222;
+            padding: 50px 0;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            text-align: center;
+            gap: 20px;
+        }
+
+        .stat-item h3 { font-size: 2.2rem; color: #fff; margin-bottom: 5px; font-weight: 700; }
+        .stat-item p { color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* --- FEATURED WORK (Midnight Date) --- */
+        .featured { padding: 120px 0; }
+
+        .featured-card {
+            background: var(--bg-card);
+            border-radius: 4px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #222;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
+
+        @media(min-width: 768px) { .featured-card { flex-direction: row; } }
+
+        .featured-visual {
+            flex: 1.2;
+            min-height: 400px;
+            position: relative;
+            /* Creating a CSS Poster since we don't have the image file yet */
+            background: linear-gradient(to bottom, rgba(0,0,0,0), #000), 
+                        url('./featured-bg.png');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: flex-end;
+            padding: 40px;
+        }
+
+        .poster-title {
+            font-family: var(--font-serif);
+            font-size: 3rem;
+            color: #fff;
+            text-shadow: 0 0 20px rgba(255,255,255,0.5);
+            line-height: 1;
+        }
+
+        .featured-text {
+            flex: 1;
+            padding: 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .featured-text h3 { font-size: 2.2rem; color: #fff; margin-bottom: 15px; }
+        .tag { 
+            color: var(--accent); 
+            font-size: 0.75rem; 
+            letter-spacing: 2px; 
+            text-transform: uppercase; 
+            margin-bottom: 15px; 
+            display: inline-block;
+            border: 1px solid var(--accent);
+            padding: 5px 10px;
+            width: fit-content;
+        }
+
+        /* --- SANATAN UNTOLD SECTION --- */
+        .sanatan-section {
+            padding: 120px 0;
+            background: linear-gradient(to bottom, #050505, #110d00); /* Very subtle gold tint at bottom */
+            text-align: center;
+            border-top: 1px solid #222;
+        }
+
+        .sanatan-header { margin-bottom: 60px; }
+        
+        .sanatan-logo-text {
+            font-family: var(--font-serif);
+            color: #ffaa00; 
+            font-size: 3.5rem;
+            margin-bottom: 10px;
+            text-shadow: 0 0 30px rgba(255, 170, 0, 0.2);
+        }
+
+        .yt-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 40px;
+            margin-top: 50px;
+        }
+
+        .yt-card {
+            background: #000;
+            border: 1px solid #333;
+            transition: 0.3s;
+            text-align: left;
+            group: hover;
+        }
+
+        .yt-card:hover { transform: translateY(-5px); border-color: #ffaa00; }
+
+        .yt-thumb {
+            width: 100%;
+            aspect-ratio: 16/9;
+            background: #222;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .yt-thumb img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
+        .yt-card:hover .yt-thumb img { transform: scale(1.05); }
+
+        .yt-info { padding: 20px; }
+        .yt-info h4 { color: #fff; margin-bottom: 5px; font-size: 1.1rem; }
+        .yt-info p { color: #888; font-size: 0.9rem; }
+
+        /* --- SERVICES (UPDATED WITH AI PIPELINE INFO) --- */
+        .services { padding: 120px 0; background: #080808; border-top: 1px solid #222; }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 30px;
+        }
+
+        .service-card {
+            background: var(--bg-card);
+            padding: 40px 30px;
+            border: 1px solid #222;
+            transition: 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 3px; height: 100%;
+            background: var(--accent);
+            opacity: 0;
+            transition: 0.3s;
+        }
+
+        .service-card:hover { transform: translateY(-5px); background: #161616; }
+        .service-card:hover::before { opacity: 1; }
+
+        .service-icon { font-size: 2.5rem; color: var(--accent); margin-bottom: 25px; }
+        .service-card h4 { color: #fff; font-size: 1.3rem; margin-bottom: 15px; }
+        .service-card p { font-size: 0.95rem; color: var(--text-muted); margin-bottom: 15px; }
+        .tech-detail { font-size: 0.85rem; color: #666; border-top: 1px solid #333; padding-top: 15px; }
+
+        /* --- FOUNDERS --- */
+        .founders { padding: 120px 0; }
+        .founders-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(450px, 1fr)); gap: 40px; }
+
+        .founder-card {
+            display: flex;
+            gap: 25px;
+            align-items: flex-start;
+            background: var(--bg-card);
+            padding: 30px;
+            border: 1px solid #222;
+        }
+
+        .founder-img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%; /* Make it circular */
+            background: #333; /* Fallback color */
+            flex-shrink: 0;
+            overflow: hidden;
+            border: 2px solid #333;
+        }
+        
+        /* Placeholder styling for founders if no images provided */
+        .founder-img-placeholder {
+            width: 100%; height: 100%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 2rem; color: #555; background: #222;
+        }
+
+        .founder-info h4 { color: #fff; font-size: 1.4rem; margin-bottom: 5px; }
+        .role { color: var(--accent); font-size: 0.8rem; text-transform: uppercase; display: block; margin-bottom: 15px; font-weight: bold; }
+
+        /* --- FOOTER --- */
+        footer {
+            background: #020202;
+            padding: 80px 0 40px;
+            border-top: 1px solid #222;
+            font-size: 0.9rem;
+            color: #777;
+        }
+        .footer-col h5 { color: #fff; margin-bottom: 25px; text-transform: uppercase; letter-spacing: 1px; }
+        .footer-col a { display: block; margin-bottom: 12px; }
+        .footer-col a:hover { color: var(--accent); }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 768px) {
+            .hero-content h1 { font-size: 2.8rem; }
+            .nav-links { display: none; }
+            .stats-grid { grid-template-columns: 1fr 1fr; }
+            .featured-card { flex-direction: column; }
+            .founder-card { flex-direction: column; text-align: center; align-items: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <img src="logo.png" alt="Mystic Lens Logo">
+                    <span></span>
+                </div>
+                <div class="nav-links">
+                    <a href="#work">Showcase</a>
+                    <a href="#sanatan">Sanatan Untold</a>
+                    <a href="#services">Capabilities</a>
+                    <a href="#about">Founders</a>
+                    <a href="mailto:youdioai@gmail.com" style="color:var(--accent); border:1px solid var(--accent); padding: 5px 15px;">Contact</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container hero-content">
+            <h1>AI-Native<br>Cinematic Storytelling.</h1>
+            <p>Founded by IIT Alumni. We build production-grade AI systems to transform how stories are conceived and produced.</p>
+            <a href="#services" class="btn">Explore Our Tech</a>
+        </div>
+    </section>
+
+    <section class="stats-bar">
+        <div class="container stats-grid">
+            <div class="stat-item">
+                <h3>1.5M+</h3>
+                <p>Views Generated</p>
+            </div>
+            <div class="stat-item">
+                <h3>90K+</h3>
+                <p>Subscribers</p>
+            </div>
+            <div class="stat-item">
+                <h3>60%</h3>
+                <p>Cost Efficiency</p>
+            </div>
+            <div class="stat-item">
+                <h3>Days</h3>
+                <p>Not Months</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="work" class="featured">
+        <div class="container">
+            <h2 class="section-title">Original Productions</h2>
+            <p class="section-subtitle">Blending creative vision with automated AI production pipelines.</p>
+            
+            <div class="featured-card">
+                <div class="featured-visual">
+                    <div class="poster-title">Midnight<br>Date</div>
+                </div>
+                
+                <div class="featured-text">
+                    <span class="tag">India's First AI Animated Short Film</span>
+                    <h3>Cinematic Storytelling Reimagined</h3>
+                    <p>A groundbreaking Mystic Lens production. Immerse yourself in a captivating narrative of romance and mystery, brought to life through our pioneering AI workflows.</p>
+                    <p style="margin-top: 15px; color: #888; font-size: 0.9rem;">
+                        <em>Demonstrating how cutting-edge AI redefines storytelling with profound emotional appeal.</em>
+                    </p>
+                    <a href="https://www.youtube.com/watch?v=OtGx4qXUnnM" target="_blank" class="btn">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                        Watch on YouTube
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="sanatan" class="sanatan-section">
+        <div class="container">
+            <div class="sanatan-header">
+                <h2 class="sanatan-logo-text">Sanatan Untold</h2>
+                <p style="color: #ccc; max-width: 600px; margin: 0 auto;">
+                    Preserving India's cultural identity through modern AI. 
+                    <br><strong>90K+ Subscribers • 1.5M+ Views</strong>
+                </p>
+            </div>
+            
+            <div class="yt-grid">
+                <a href="https://www.youtube.com/watch?v=Xb7Nx9M5T0U" target="_blank" class="yt-card">
+                    <div class="yt-thumb">
+                        <img src="https://img.youtube.com/vi/Xb7Nx9M5T0U/maxresdefault.jpg" alt="Har Har Mahadev Thumbnail">
+                    </div>
+                    <div class="yt-info">
+                        <h4>Har Har Mahadev</h4>
+                        <p>550,000+ Views • Operation Sindoor Music Video</p>
+                        <p style="margin-top:10px; font-size:0.8rem; color:#666;">When dharma falls, Shiva rises. This isn't just a song, its a cinematic salute to our brave Indian Armed Forces, fueled by the divine inspiration of Lord Shiva.</p>
+                    </div>
+                </a>
+                <a href="https://www.youtube.com/watch?v=EPGJmP-_ay4" target="_blank" class="yt-card">
+                    <div class="yt-thumb">
+                        <img src="https://img.youtube.com/vi/EPGJmP-_ay4/maxresdefault.jpg" alt="Mahakal Udghosh Thumbnail">
+                    </div>
+                    <div class="yt-info">
+                        <h4>Mahakal Udghosh</h4>
+                        <p>400,000+ Views • AI Music Video</p>
+                        <p style="margin-top:10px; font-size:0.8rem; color:#666;">Witness "Mahakal Udghosh" – a groundbreaking, powerful Hindi music video for Lord Shiva, brought to life by Artificial Intelligence!</p>
+                    </div>
+                </a>
+
+                <a href="https://www.youtube.com/watch?v=3kzBDDpPKPA" target="_blank" class="yt-card">
+                    <div class="yt-thumb">
+                        <img src="https://img.youtube.com/vi/3kzBDDpPKPA/maxresdefault.jpg" alt="Raksha Bandhan Thumbnail">
+                    </div>
+                    <div class="yt-info">
+                        <h4>Raksha Bandhan Tribute</h4>
+                        <p>100,000+ Views • Cinematic Celebration</p>
+                        <p style="margin-top:10px; font-size:0.8rem; color:#666;">Showcasing our ability to connect with audiences through culturally resonant stories. 100% AI Music Video on Brother-Sister Bond.</p>
+                    </div>
+                </a>
+                <a href="https://www.youtube.com/watch?v=vZMyxgd8yR8" target="_blank" class="yt-card">
+                    <div class="yt-thumb">
+                        <img src="https://img.youtube.com/vi/vZMyxgd8yR8/maxresdefault.jpg" alt="Sikh Bhajan Thumbnail">
+                    </div>
+                    <div class="yt-info">
+                        <h4>Sahare Tere Naam Chale</h4>
+                        <p>20,000+ Views • Animated Sikh Bhajan</p>
+                        <p style="margin-top:10px; font-size:0.8rem; color:#666;">“Sahare Tere Naam Chale” is a heart-touching Sikh animated devotional story that beautifully shows how life moves forward with the support of Waheguru’s Naam.</p>
+                    </div>
+                </a>
+            </div>
+            
+            <a href="https://www.youtube.com/@SanatanUntold/" target="_blank" class="btn" style="border-color: #ffaa00; color: #ffaa00; margin-top: 50px;">Visit Channel</a>
+        </div>
+    </section>
+
+    <section id="services" class="services">
+        <div class="container">
+            <h2 class="section-title">Production Ecosystem</h2>
+            <p class="section-subtitle">We develop the systems that build the stories.</p>
+            
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-icon">🎥</div>
+                    <h4>AI-Powered Filmmaking</h4>
+                    <p>Creating cinematic experiences that traditionally require massive budgets, now accessible through our generative tech.</p>
+                    <div class="tech-detail">
+                        <strong>Pipeline:</strong> Automated short film production systems & scene generation.
+                    </div>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">⚡</div>
+                    <h4>Automated Animation</h4>
+                    <p>Revitalizing Indian comic characters and creating new IP using cutting-edge animation techniques.</p>
+                    <div class="tech-detail">
+                        <strong>Tech:</strong> Advanced character consistency & AI-driven motion workflows.
+                    </div>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">🚀</div>
+                    <h4>Brand Acceleration</h4>
+                    <p>Producing innovative advertisements (Lenskart, Red Bull showcases) with 60% reduced costs.</p>
+                    <div class="tech-detail">
+                        <strong>Speed:</strong> Timeline reduction from months to days.
+                    </div>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">🎵</div>
+                    <h4>Original Audio</h4>
+                    <p>Crafting compelling AI-powered soundtracks and music videos that enhance emotional storytelling.</p>
+                    <div class="tech-detail">
+                        <strong>Output:</strong> Full audio-visual synchronization.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="founders">
+        <div class="container">
+            <h2 class="section-title">The Founders</h2>
+            <div class="founders-grid">
+                <div class="founder-card">
+                    <div class="founder-img">
+                         <div class="founder-img-placeholder">AG</div>
+                    </div>
+                    <div class="founder-info">
+                        <h4>Aseem Gupta</h4>
+                        <span class="role">Founder & CEO | IIT Kanpur Alumnus</span>
+                        <p style="color: #aaa; font-size: 0.9rem;">
+                            Serial entrepreneur and Creative AI Technologist. Co-founded Zlott and Ecosense. Building innovative solutions at the intersection of technology, business, and creativity.
+                        </p>
+                    </div>
+                </div>
+                <div class="founder-card">
+                    <div class="founder-img">
+                        <div class="founder-img-placeholder">PK</div>
+                    </div>
+                    <div class="founder-info">
+                        <h4>Pratyush Kumar</h4>
+                        <span class="role">Investor & Creative Strategist | IIT Roorkee Alumnus</span>
+                        <p style="color: #aaa; font-size: 0.9rem;">
+                            17+ years scaling Algoworks to acquisition. A long-time angel investor backing high-growth startups and crafting AI strategies.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer id="contact">
+        <div class="container" style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:40px;">
+            <div class="footer-col">
+                <h5>Mystic Lens Entertainment</h5>
+                <p>Cinematic Storytelling Reimagined.<br>Greater Noida, India.</p>
+            </div>
+            <div class="footer-col">
+                <h5>Partner With Us</h5>
+                <a href="mailto:youdioai@gmail.com">youdioai@gmail.com</a>
+                <a href="tel:+919910477840">+91-9910477840</a>
+                <a href="https://www.linkedin.com/in/aseem-gupta">LinkedIn Profile</a>
+            </div>
+            <div class="footer-col">
+                <h5>Social</h5>
+                <a href="https://www.youtube.com/@mysticlensai">Mystic Lens YouTube</a>
+                <a href="https://www.youtube.com/@SanatanUntold/">Sanatan Untold YouTube</a>
+            </div>
+        </div>
+        <div class="container" style="margin-top: 40px; border-top: 1px solid #1a1a1a; padding-top: 20px; text-align: center; color: #444; font-size: 0.8rem;">
+            &copy; 2026 Mystic Lens Entertainment. All rights reserved.
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+
+        // Simple Fade-in
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = 1;
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.service-card, .featured-card, .stat-item, .yt-card').forEach(el => {
+            el.style.opacity = 0;
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'all 0.6s ease-out';
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
