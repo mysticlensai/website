@@ -116,41 +116,68 @@
 
         /* --- HERO SECTION --- */
         .hero {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            background: radial-gradient(circle at center, #1a1a1a 0%, #000 100%);
-            padding-top: 80px;
-            position: relative;
-        }
+        position: relative;
+        height: 100vh;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        background: #000; /* Background color while loading */
+    }
 
-        .hero::after {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: url('https://www.transparenttextures.com/patterns/stardust.png');
-            opacity: 0.3;
-            pointer-events: none;
-        }
+    /* This holds the YouTube Player */
+    #hero-video-player {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+        pointer-events: none;
+    }
 
-        .hero-content h1 {
-            font-size: 4.5rem;
-            line-height: 1.1;
-            margin-bottom: 25px;
-            background: linear-gradient(to bottom right, #ffffff, #999999);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
+    /* Scaling trick to make the video cover the screen (no black bars) */
+    .hero-video-wrapper {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 100vw;
+        height: 56.25vw; /* 16:9 aspect ratio */
+        min-height: 100vh;
+        min-width: 177.77vh;
+        transform: translate(-50%, -50%);
+    }
 
-        .hero-content p {
-            font-size: 1.3rem;
-            color: var(--text-muted);
-            max-width: 800px;
-            margin: 0 auto 35px;
-            font-weight: 300;
-        }
+    .hero-overlay {
+        position: absolute;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.7));
+        z-index: 2;
+    }
+
+    .hero-content {
+        position: relative;
+        z-index: 3;
+        text-align: center;
+        max-width: 900px;
+        padding: 0 20px;
+    }
+
+    .hero-content h1 {
+        font-size: clamp(2.5rem, 8vw, 4.5rem);
+        line-height: 1.1;
+        margin-bottom: 20px;
+        font-weight: 700;
+        letter-spacing: -1px;
+    }
+
+    .hero-content p {
+        font-size: 1.25rem;
+        color: #d1d1d1;
+        margin-bottom: 35px;
+        font-weight: 300;
+    }
 
         /* --- STATS BAR --- */
         .stats-bar {
@@ -543,19 +570,25 @@
                     <a href="#ai-scope">AI Services</a>
                     <a href="#services">Capabilities</a>
                     <a href="#about">Team</a>
-                    <a href="mailto:youdioai@gmail.com" style="color:var(--accent); border:1px solid var(--accent); padding: 5px 15px;">Contact</a>
+                    <a href="#contact" style="color:var(--accent); border:1px solid var(--accent); padding: 5px 15px;">Contact</a>
                 </div>
             </nav>
         </div>
     </header>
 
     <section class="hero">
-        <div class="container hero-content">
-            <h1>AI-Native<br>Cinematic Storytelling.</h1>
-            <p>Founded by IIT Alumni. We build production-grade AI systems to transform how stories are conceived and produced.</p>
-            <a href="#work" class="btn">Explore Our Work</a>
-        </div>
-    </section>
+    <div class="hero-video-wrapper">
+        <div id="hero-video-player"></div>
+    </div>
+    
+    <div class="hero-overlay"></div>
+
+    <div class="hero-content">
+        <h1>AI-Native<br>Cinematic Storytelling.</h1>
+        <p>Founded by IIT Alumni. We build production-grade AI systems to transform how stories are conceived and produced.</p>
+        <a href="#work" class="btn">Explore Our Work</a>
+    </div>
+</section>
 
     <section class="stats-bar">
         <div class="container stats-grid">
@@ -877,6 +910,39 @@
             el.style.transition = 'all 0.6s ease-out';
             observer.observe(el);
         });
+
+        // 1. Load the IFrame Player API code asynchronously.
+        var tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+        // 2. This function creates an <iframe> (and YouTube player)
+        //    after the API code downloads.
+        var player;
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('hero-video-player', {
+                videoId: 'GdR3yQ96LJ0', // Your Video ID
+                playerVars: {
+                    'autoplay': 1,
+                    'controls': 0,
+                    'rel': 0,
+                    'showinfo': 0,
+                    'modestbranding': 1,
+                    'loop': 1,
+                    'playlist': 'GdR3yQ96LJ0', // Required for looping
+                    'mute': 1,
+                    'iv_load_policy': 3
+                },
+                events: {
+                    'onReady': onPlayerReady
+                }
+            });
+        }
+
+        function onPlayerReady(event) {
+            event.target.playVideo();
+        }
     </script>
 </body>
 </html>
